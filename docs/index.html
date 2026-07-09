@@ -1,1 +1,344 @@
-WA
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lebbex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #2b2c2f;
+    --surface: #333438;
+    --surface-2: #3a3b40;
+    --border: #4b4c52;
+    --text: #ececec;
+    --text-muted: #9a9ba1;
+    --accent: #f4a531;
+    --accent-dim: #7a5a26;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.045) 1px, transparent 0);
+    background-size: 28px 28px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  .mono{ font-family: 'IBM Plex Mono', monospace; }
+
+  /* ---------- Hazard marquee ---------- */
+  .hazard{
+    width: 100%;
+    overflow: hidden;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        var(--accent) 0px, var(--accent) 22px,
+        #1f2022 22px, #1f2022 44px
+      );
+    border-bottom: 1px solid var(--border);
+  }
+  .hazard-track{
+    display: flex;
+    width: max-content;
+    animation: scroll-left 22s linear infinite;
+  }
+  .hazard-track span{
+    display: inline-block;
+    padding: 8px 28px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: #1f2022;
+    white-space: nowrap;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.15);
+  }
+  @keyframes scroll-left{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hazard-track{ animation: none; }
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  header.hero{
+    padding: 72px 0 40px;
+    text-align: center;
+  }
+
+  .badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px dashed var(--accent-dim);
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    padding: 6px 14px;
+    border-radius: 3px;
+    margin-bottom: 28px;
+  }
+  .badge::before{
+    content: '';
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(244,165,49,0.18);
+  }
+
+  .wordmark{
+    font-size: clamp(48px, 9vw, 84px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1;
+  }
+  .wordmark .dot{ color: var(--accent); }
+
+  .status-line{
+    margin-top: 14px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .description{
+    max-width: 560px;
+    margin: 28px auto 0;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+  .description strong{ color: var(--text); font-weight: 500; }
+
+  /* ---------- Section framing ---------- */
+  section{ margin-top: 64px; }
+
+  .section-label{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .section-label::before{ content: '['; color: var(--accent-dim); }
+  .section-label::after{
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 4px;
+  }
+  .section-label .close{ color: var(--accent-dim); margin-left: -6px; }
+
+  /* ---------- Project cards ---------- */
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .card{
+    position: relative;
+    display: block;
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px 20px;
+    transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+  .card:hover, .card:focus-visible{
+    border-color: var(--accent);
+    background: var(--surface-2);
+    transform: translateY(-2px);
+  }
+  .card:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .card::before, .card::after{
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    border-color: var(--border);
+    transition: border-color 0.18s ease;
+  }
+  .card::before{ top: 6px; left: 6px; border-top: 1px solid; border-left: 1px solid; }
+  .card::after{ bottom: 6px; right: 6px; border-bottom: 1px solid; border-right: 1px solid; }
+  .card:hover::before, .card:hover::after{ border-color: var(--accent); }
+
+  .card-name{
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-arrow{
+    color: var(--text-muted);
+    transition: transform 0.18s ease, color 0.18s ease;
+  }
+  .card:hover .card-arrow{ transform: translate(3px,-3px); color: var(--accent); }
+
+  .card-url{
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  .card.placeholder{
+    opacity: 0.55;
+    cursor: default;
+  }
+  .card.placeholder:hover{
+    border-color: var(--border);
+    background: var(--surface);
+    transform: none;
+  }
+  .card.placeholder .card-arrow{ display:none; }
+
+  /* ---------- Socials ---------- */
+  .social-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .social-btn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  }
+  .social-btn svg{ width: 18px; height: 18px; fill: var(--text-muted); transition: fill 0.18s ease; }
+  .social-btn:hover, .social-btn:focus-visible{
+    border-color: var(--accent);
+    background: var(--surface-2);
+    transform: translateY(-2px);
+  }
+  .social-btn:hover svg{ fill: var(--accent); }
+  .social-btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Contact ---------- */
+  .terminal{
+    background: #1f2022;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 22px;
+    font-size: 15px;
+  }
+  .terminal a{
+    text-decoration: none;
+    color: var(--accent);
+  }
+  .terminal a:hover{ text-decoration: underline; }
+  .prompt{ color: var(--text-muted); margin-right: 8px; }
+
+  footer{
+    margin-top: 72px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<div class="hazard">
+  <div class="hazard-track">
+    <span>UNDER CONSTRUCTION</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="badge mono">BUILD IN PROGRESS</div>
+    <h1 class="wordmark mono">Lebbex<span class="dot">.</span></h1>
+    <p class="description">
+      <strong>Lebbex</strong> is a company with it's own description, I'll add the description when I'll feel like it but I'm too lazy now :(
+        Also, this entire page was pretty much fully made by AI except for most text which I wrote myself.
+    </p>
+  </header>
+
+  <section>
+    <div class="section-label mono">PROJECTS<span class="close">]</span></div>
+    <div class="grid">
+      <a class="card" href="https://lxon.lebbex.com" target="_blank" rel="noopener">
+        <div class="card-name mono">LXON <span class="card-arrow">↗</span></div>
+        <div class="card-url mono">lxon.lebbex.com</div>
+      </a>
+      <a class="card" href="https://arrel.lebbex.com" target="_blank" rel="noopener">
+        <div class="card-name mono">ARREL <span class="card-arrow">↗</span></div>
+        <div class="card-url mono">arrel.lebbex.com</div>
+      </a>
+      <div class="card placeholder">
+        <div class="card-name mono">???</div>
+        <div class="card-url mono">coming soon</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label mono">CONNECT<span class="close">]</span></div>
+    <div class="social-row">
+      <a class="social-btn" href="https://youtube.com/@LebbexLX" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+        YouTube
+      </a>
+      <a class="social-btn" href="https://twitter.com/lebbex" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M23.3 4.8a9.5 9.5 0 0 1-2.7.75 4.7 4.7 0 0 0 2.06-2.6 9.4 9.4 0 0 1-3 1.14 4.68 4.68 0 0 0-8 4.27A13.3 13.3 0 0 1 1.64 3.6a4.68 4.68 0 0 0 1.45 6.24 4.6 4.6 0 0 1-2.12-.58v.06a4.68 4.68 0 0 0 3.75 4.58 4.7 4.7 0 0 1-2.1.08 4.68 4.68 0 0 0 4.37 3.25A9.4 9.4 0 0 1 0 19.29a13.27 13.27 0 0 0 7.19 2.1c8.63 0 13.35-7.15 13.35-13.35 0-.2 0-.4-.02-.6a9.5 9.5 0 0 0 2.33-2.42Z"/></svg>
+        Twitter
+      </a>
+      <a class="social-btn" href="https://github.com/lebbex" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 8.4 22.9c.58.1.79-.25.79-.56v-2.2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.6.24 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.26 5.69.42.36.78 1.07.78 2.16v3.2c0 .32.2.68.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label mono">CONTACT<span class="close">]</span></div>
+    <div class="terminal mono">
+      <span class="prompt">&gt;</span><a href="mailto:lebbex@lebbex.com">lebbex@lebbex.com</a>
+    </div>
+  </section>
+
+  <footer class="mono">
+    Lebbex &copy; 2026 (this page is temporary and will be replaced soon)
+  </footer>
+
+</div>
+
+</body>
+</html>
