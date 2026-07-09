@@ -38,41 +38,6 @@
 
   .mono{ font-family: 'IBM Plex Mono', monospace; }
 
-  /* ---------- Hazard marquee ---------- */
-  .hazard{
-    width: 100%;
-    overflow: hidden;
-    background:
-      repeating-linear-gradient(
-        135deg,
-        var(--accent) 0px, var(--accent) 22px,
-        #1f2022 22px, #1f2022 44px
-      );
-    border-bottom: 1px solid var(--border);
-  }
-  .hazard-track{
-    display: flex;
-    width: max-content;
-    animation: scroll-left 22s linear infinite;
-  }
-  .hazard-track span{
-    display: inline-block;
-    padding: 8px 28px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    color: #1f2022;
-    white-space: nowrap;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.15);
-  }
-  @keyframes scroll-left{
-    from{ transform: translateX(0); }
-    to{ transform: translateX(-50%); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .hazard-track{ animation: none; }
-  }
-
   /* ---------- Layout ---------- */
   .wrap{
     max-width: 880px;
@@ -81,7 +46,7 @@
   }
 
   header.hero{
-    padding: 72px 0 40px;
+    padding: 36px 0 16px;
     text-align: center;
   }
 
@@ -134,6 +99,7 @@
 
   /* ---------- Section framing ---------- */
   section{ margin-top: 64px; }
+  header.hero + section{ margin-top: 20px; }
 
   .section-label{
     display: flex;
@@ -220,7 +186,7 @@
   }
   .card.placeholder .card-arrow{ display:none; }
 
-  /* ---------- Socials ---------- */
+  /* ---------- Socials + contact ---------- */
   .social-row{
     display: flex;
     flex-wrap: wrap;
@@ -238,9 +204,11 @@
     font-size: 14px;
     font-weight: 500;
     color: var(--text);
+    font-family: inherit;
+    cursor: pointer;
     transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
   }
-  .social-btn svg{ width: 18px; height: 18px; fill: var(--text-muted); transition: fill 0.18s ease; }
+  .social-btn svg{ width: 18px; height: 18px; fill: var(--text-muted); transition: fill 0.18s ease; flex-shrink: 0; }
   .social-btn:hover, .social-btn:focus-visible{
     border-color: var(--accent);
     background: var(--surface-2);
@@ -249,20 +217,20 @@
   .social-btn:hover svg{ fill: var(--accent); }
   .social-btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* ---------- Contact ---------- */
-  .terminal{
-    background: #1f2022;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 20px 22px;
-    font-size: 15px;
-  }
-  .terminal a{
-    text-decoration: none;
+  .copy-status{
+    width: 100%;
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
     color: var(--accent);
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
-  .terminal a:hover{ text-decoration: underline; }
-  .prompt{ color: var(--text-muted); margin-right: 8px; }
+  .copy-status.visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   footer{
     margin-top: 72px;
@@ -289,11 +257,11 @@
   <section>
     <div class="section-label mono">PROJECTS<span class="close">]</span></div>
     <div class="grid">
-      <a class="card" href="https://lxon.lebbex.com" target="_blank" rel="noopener">
+      <a class="card" href="https://lxon.lebbex.com">
         <div class="card-name mono">LXON <span class="card-arrow">↗</span></div>
         <div class="card-url mono">lxon.lebbex.com</div>
       </a>
-      <a class="card" href="https://arrel.lebbex.com" target="_blank" rel="noopener">
+      <a class="card" href="https://arrel.lebbex.com">
         <div class="card-name mono">ARREL <span class="card-arrow">↗</span></div>
         <div class="card-url mono">arrel.lebbex.com</div>
       </a>
@@ -319,13 +287,11 @@
         <svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 8.4 22.9c.58.1.79-.25.79-.56v-2.2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.6.24 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.26 5.69.42.36.78 1.07.78 2.16v3.2c0 .32.2.68.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
         GitHub
       </a>
-    </div>
-  </section>
-
-  <section>
-    <div class="section-label mono">CONTACT<span class="close">]</span></div>
-    <div class="terminal mono">
-      <span class="prompt">&gt;</span><a href="mailto:lebbex@lebbex.com">lebbex@lebbex.com</a>
+      <button class="social-btn mono" id="emailBtn" type="button">
+        <svg viewBox="0 0 24 24"><path d="M2 4h20a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm10 9L3.2 6.2A1 1 0 0 0 3 6.5v11c0 .06.01.1.02.15L9.8 12 12 13Zm-1.4-1L2.6 5.4A1 1 0 0 1 3 5h18a1 1 0 0 1 .4.08L12 12l-1.4.5-.4.5Zm2.8-.5L21 5.08A1 1 0 0 0 20.8 5H3.2l8.4 6.5.4.5.4-.5Zm1.4 1L14 13l7.98 5.65A.99.99 0 0 0 21 18.5v-11c0-.1-.01-.18-.03-.27L14.8 12.5Z"/></svg>
+        lebbex@lebbex.com
+      </button>
+      <div class="copy-status mono" id="copyStatus">Copied to clipboard</div>
     </div>
   </section>
 
@@ -334,6 +300,20 @@
   </footer>
 
 </div>
+
+<script>
+  const emailBtn = document.getElementById('emailBtn');
+  const copyStatus = document.getElementById('copyStatus');
+  let copyTimeout;
+
+  emailBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText('lebbex@lebbex.com').then(() => {
+      copyStatus.classList.add('visible');
+      clearTimeout(copyTimeout);
+      copyTimeout = setTimeout(() => copyStatus.classList.remove('visible'), 2200);
+    });
+  });
+</script>
 
 </body>
 </html>
